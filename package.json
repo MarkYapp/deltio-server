@@ -1,0 +1,30 @@
+{
+  "name": "deltio-server",
+  "version": "1.0.0",
+  "description": "API for Deltio client",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chai-http": "^4.2.1",
+    "chai": "^4.2.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.11"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarkYapp/deltio-server.git"
+  },
+  "author": "Mark Yapp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarkYapp/deltio-server/issues"
+  },
+  "homepage": "https://github.com/MarkYapp/deltio-server#readme"
+}
