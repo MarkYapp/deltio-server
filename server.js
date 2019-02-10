@@ -3,6 +3,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+//CORS
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
 
