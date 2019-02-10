@@ -1,5 +1,11 @@
 language: node_js
- node_js: node
- services:
-     - mongodb
-
+node_js: node
+services:
+- mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: Px016D0Em51eokbR30hcMVpFLeJipw+KZge6xtYdRzCsqvRyHJpTWjR7NeBG2UlVxASrevxs3ns8f4o4qRrj/EoqL/Z/WhmphCvDQWZqzo1TMP1EaxWcBQLtYat494mzV3Hde8kYmoT748f2AiOHMo8Vdjak78sqOPMTBy1ZV0YyDVdR1FzTKXn4+acn4aj1Wq6hQqgD1q3DUI6Z7c5AbN6JOELFzr+u4xh4b/yM+NR30zDcka/I2X/S7uclCaIoYOLJgXA/KQyGdIF6ZCikQElmLeXCwqO3toHW2dbo7aHM0AHRChVGuujoFB9PuLJcbPmxv3mrizvSsXVhcavnN04Spvp0KS2q2/Q8ywdLgQfVPmL8kU2AeUJSsKHLO/fU3LqfA8ItFaoEWbCgV2iKAlqK5RpgLSB9CbkkveZr6f+J2EQ+++tOgdjqafLUOZAiORmNTVBjbxhYhYOlCM+CSbXxe4FeB17O4h8hfLfQGa9yAzUSJUutLYead9ChoOawYzQHOn+CbeSRPpsEZA7C7XLrMZDRFkhMTVJtO5YvIswqGOvybJKuM0Uo/2OmBECDZxN4iwcInZ2u/JgNTwqDOlCT1FDjwsl0SkCKUsDFJOyPUwdL0aZuSALZ5pZvpMZ/XKafGzK/5HBCOAPI7EDb2QBPk+C0EZqcbque5tmtoac=
+  app: afternoon-springs-38653
+  on:
+    repo: MarkYapp/deltio-server
