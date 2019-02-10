@@ -1,7 +1,12 @@
 language: node_js
 node_js: node
+cache:
+  directories:
+    - node_modules
 services:
-- mongodb
+  - mongodb
+env:
+  - CI=true
 deploy:
   provider: heroku
   api_key:

@@ -20,12 +20,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MarkYapp/deltio-server.git"
+    "url": "https://github.com/MarkYapp/deltio-server.git"
   },
   "author": "Mark Yapp",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MarkYapp/deltio-server/issues"
-  },
-  "homepage": "https://github.com/MarkYapp/deltio-server#readme"
+  "license": "ISC"
 }
