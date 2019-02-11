@@ -1,3 +1,5 @@
 node_modules
 .DS_STORE
 deltio-user-data.json
+deltio-card-data.json
+.env
