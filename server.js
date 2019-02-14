@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 
 const { PORT, DATABASE_URL } = require('./config');
 
-//CORS
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
 
@@ -14,16 +13,15 @@ app.use(
   })
 );
 
-app.get('/api/*', (req, res) => {
-  res.json({ ok: true });
+const userRouter = require('./routers/users');
+app.use('/api/login', userRouter);
+
+const cardRouter = require('./routers/postcards');
+app.use('/api/cards', cardRouter);
+
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Not Found' });
 });
-
-const router = require('./router');
-app.use('/cards', router);
-
-// app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-// module.exports = { app };
 
 function runServer(databaseUrl, port = PORT) {
   return new Promise((resolve, reject) => {
