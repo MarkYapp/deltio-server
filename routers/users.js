@@ -7,16 +7,12 @@ const jsonParser = bodyParser.json();
 const Users = require('../models');
 
 //user API
-router.post('/', jsonParser, (req, res) => {
-  console.log('server user API reached');
-  console.log(req.body);
-  return res.json(req.body);
-  // const username = JSON.stringify(req.body.username);
-  // console.log(username);
-  // username = JSON.stringify(req.body.username);
-  // password = JSON.stringify(req.body.password);
+router.post('/login', jsonParser, (req, res) => {
+  return res.json('response from auth POST endpoint');
+});
 
-  // res.json({ username });
+router.post('/signup', jsonParser, (req, res) => {
+  return res.json(req.body);
 });
 
 module.exports = router;

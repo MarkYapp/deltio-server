@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+app.use(morgan('common'));
 
 const { PORT, DATABASE_URL } = require('./config');
 
@@ -14,7 +16,7 @@ app.use(
 );
 
 const userRouter = require('./routers/users');
-app.use('/api/login', userRouter);
+app.use('/api/auth', userRouter);
 
 const cardRouter = require('./routers/postcards');
 app.use('/api/cards', cardRouter);
