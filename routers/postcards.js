@@ -7,11 +7,10 @@ const jsonParser = bodyParser.json();
 const Card = require('../models');
 
 //GET cards
-router.get('/', (req, res) => {
-  // let username = getUsernameFromJwt(req);
-  // User.findOne({ username: username }).then(user => {
-  res.json('cool');
-  Card.findOne();
+router.post('/', jsonParser, (req, res) => {
+  return res.json('response from auth POST endpoint');
+  // res.json('cool');
+  // Card.findOne();
   // .then(card => {
   //   res.json(card);
   // })
