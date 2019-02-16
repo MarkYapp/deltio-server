@@ -4,7 +4,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const Users = require('../models');
+const { Users } = require('../models');
 
 //user API
 router.post('/login', jsonParser, (req, res) => {
