@@ -38,12 +38,32 @@ router.post('/', jsonParser, (req, res) => {
 
 //Update a card
 router.put('/:id', jsonParser, (req, res) => {
-  return res.json('response from auth PUT endpoint');
+  console.log(req.params.id);
+  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+    const message =
+      `Request path id (${req.params.id}) and request body id ` + `(${req.body.id}) must match`;
+    return res.status(400).json({ message: message });
+  }
+
+  const toUpdate = {};
+  const updateableFields = ['image', 'recipients', 'message'];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
+  Card.findByIdAndUpdate(req.params.id, { $set: toUpdate })
+    .then(() => res.status(204).end())
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 //Delete a card
-router.delete('/:id', jsonParser, (req, res) => {
-  return res.json('response from auth DELETE endpoint');
+router.delete('/:id', (req, res) => {
+  console.log(req.params.id);
+  Card.findByIdAndRemove(req.params.id)
+    .then(() => res.status(204).end())
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 module.exports = router;
