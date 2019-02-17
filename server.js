@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
+const passport = require('passport');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 app.use(morgan('common'));
+
+require('dotenv').config();
 
 const { PORT, DATABASE_URL } = require('./config');
 
