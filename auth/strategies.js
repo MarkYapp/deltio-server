@@ -17,7 +17,6 @@ const localStrategy = new LocalStrategy((username, password, callback) => {
           message: 'Incorrect username or password'
         });
       }
-      return user.validatePassword(password);
     })
     .then(isValid => {
       if (!isValid) {
