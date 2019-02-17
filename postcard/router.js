@@ -20,7 +20,6 @@ router.get('/:id', jsonParser, (req, res) => {
 
 //Create a card
 router.post('/', jsonParser, (req, res) => {
-  // let username = getUsernameFromJwt(req);
   // User.findOne({ 'username': username })
   const { full, thumb, alt, credit, portfolio } = req.body.image;
   const { recipients, message } = req.body;
@@ -39,11 +38,6 @@ router.post('/', jsonParser, (req, res) => {
 //Update a card
 router.put('/:id', jsonParser, (req, res) => {
   console.log(req.params.id);
-  // if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-  //   const message =
-  //     `Request path id (${req.params.id}) and request body id ` + `(${req.body.id}) must match`;
-  //   return res.status(400).json({ message: message });
-  // }
 
   const toUpdate = {};
   const updateableFields = ['image', 'recipients', 'message'];
