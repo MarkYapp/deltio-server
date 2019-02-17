@@ -19,7 +19,9 @@ const cardSchema = mongoose.Schema({
   image: {
     full: String,
     thumb: String,
-    alt: String
+    alt: String,
+    credit: String,
+    portfolio: String
   },
   message: String,
   recipients: [String]
