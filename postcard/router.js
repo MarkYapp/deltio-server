@@ -39,11 +39,11 @@ router.post('/', jsonParser, (req, res) => {
 //Update a card
 router.put('/:id', jsonParser, (req, res) => {
   console.log(req.params.id);
-  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-    const message =
-      `Request path id (${req.params.id}) and request body id ` + `(${req.body.id}) must match`;
-    return res.status(400).json({ message: message });
-  }
+  // if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+  //   const message =
+  //     `Request path id (${req.params.id}) and request body id ` + `(${req.body.id}) must match`;
+  //   return res.status(400).json({ message: message });
+  // }
 
   const toUpdate = {};
   const updateableFields = ['image', 'recipients', 'message'];
