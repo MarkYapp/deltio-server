@@ -4,7 +4,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const { Card } = require('../models');
+const { Card } = require('./models');
 
 //Fetch all cards
 router.get('/', jsonParser, (req, res) => {
@@ -66,4 +66,4 @@ router.delete('/:id', (req, res) => {
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-module.exports = router;
+module.exports = { router };

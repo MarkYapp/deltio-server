@@ -1,32 +1,45 @@
+'use strict';
+require('dotenv').config();
 const express = require('express');
-const app = express();
-const passport = require('passport');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-app.use(morgan('common'));
-
-require('dotenv').config();
-
-const { PORT, DATABASE_URL } = require('./config');
+const passport = require('passport');
 
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
 
+const { router: usersRouter } = require('./users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
+const { router: cardRouter } = require('./postcard');
+
+mongoose.Promise = global.Promise;
+
+const { PORT, DATABASE_URL } = require('./config');
+
+const app = express();
+
+// Logging
+app.use(morgan('common'));
+
+// CORS
 app.use(
   cors({
     origin: CLIENT_ORIGIN
   })
 );
 
-const userRouter = require('./routers/users');
-app.use('/api/auth', userRouter);
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
-const cardRouter = require('./routers/postcards');
+app.use('/api/signup', usersRouter);
+app.use('/api/login', authRouter);
 app.use('/api/cards', cardRouter);
 
 app.use('*', (req, res) => {
   return res.status(404).json({ message: 'Not Found' });
 });
+
+let server;
 
 function runServer(databaseUrl, port = PORT) {
   return new Promise((resolve, reject) => {

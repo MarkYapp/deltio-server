@@ -1,13 +1,11 @@
+'use strict';
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
+const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
-
 const config = require('../config');
-const { Users } = require('../models');
+const router = express.Router();
 
 const createAuthToken = function(user) {
   return jwt.sign({ user }, config.JWT_SECRET, {
@@ -18,16 +16,12 @@ const createAuthToken = function(user) {
 };
 
 const localAuth = passport.authenticate('local', { session: false });
+
 router.use(bodyParser.json());
 
-//user API
-router.post('/login', localAuth, (req, res) => {
-  const authToken = createAuthToken(req.user.serialize());
+router.post('/', localAuth, (req, res) => {
+  const authToken = createAuthToken(req.user);
   res.json({ authToken });
 });
 
-router.post('/signup', jsonParser, (req, res) => {
-  return res.json(req.body);
-});
-
-module.exports = router;
+module.exports = { router };
