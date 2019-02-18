@@ -4,6 +4,9 @@ services:
   - mongodb
 env:
   - CI=true
+  - JWT_SECRET=QUEEN
+  - JWT_EXPIRY=7d
+  - DATABASE_URL=mongodb://markyapp:asdf1234@ds331145.mlab.com:31145/deltio-data
 deploy:
   provider: heroku
   api_key:
