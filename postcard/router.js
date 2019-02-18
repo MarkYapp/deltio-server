@@ -34,7 +34,9 @@ router.get('/', (req, res) => {
 
 //Fetch one card
 router.get('/:id', (req, res) => {
-  return res.json('response from auth POST endpoint');
+  Card.findById(req.params.id)
+    .then(card => res.json(card))
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 //Create a card
