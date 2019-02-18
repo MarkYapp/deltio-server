@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const cardSchema = mongoose.Schema({
+  username: { type: String, required: true },
   image: {
     full: String,
     thumb: String,
