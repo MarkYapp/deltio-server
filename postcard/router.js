@@ -41,7 +41,6 @@ router.get('/:id', (req, res) => {
 
 //Create a card
 router.post('/', jsonParser, (req, res) => {
-  // console.log(req.body);
   const { full, thumb, alt, credit, portfolio } = req.body.image;
   const { username, recipients, message } = req.body;
   console.log(full, thumb, alt, credit, portfolio);
@@ -53,7 +52,6 @@ router.post('/', jsonParser, (req, res) => {
   })
     .then(card => res.status(201).json(card))
     .catch(err => {
-      // console.error(err);
       res.status(500).json({ message: 'Internal server error' });
     });
 });
