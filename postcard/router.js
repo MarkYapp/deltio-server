@@ -11,22 +11,17 @@ const jwtDecode = require('jwt-decode');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 const { Card } = require('./models');
-const { User } = require('../users/models');
 
 decodeJwt = authToken => {
   const decodedToken = jwtDecode(authToken);
-  // console.log(decodedToken);
   return decodedToken.user.username;
 };
 
 //Fetch all cards
 router.get('/', (req, res) => {
-  console.log('router.get hit');
   let username = decodeJwt(req.headers.authorization);
-  console.log(username);
   Card.find({ username: username })
     .then(cards => {
-      console.log(cards);
       res.json(cards);
     })
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
@@ -43,7 +38,6 @@ router.get('/:id', (req, res) => {
 router.post('/', jsonParser, (req, res) => {
   const { full, thumb, alt, credit, portfolio } = req.body.image;
   const { username, recipients, message } = req.body;
-  console.log(full, thumb, alt, credit, portfolio);
   Card.create({
     username,
     image: { full, thumb, alt, credit, portfolio },
@@ -58,8 +52,6 @@ router.post('/', jsonParser, (req, res) => {
 
 //Update a card
 router.put('/:id', jsonParser, (req, res) => {
-  console.log(req.params.id);
-
   const toUpdate = {};
   const updateableFields = ['image', 'recipients', 'message'];
 
@@ -75,7 +67,6 @@ router.put('/:id', jsonParser, (req, res) => {
 
 //Delete a card
 router.delete('/:id', (req, res) => {
-  console.log(req.params.id);
   Card.findByIdAndRemove(req.params.id)
     .then(() => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));

@@ -1,4 +1,5 @@
 'use strict';
 const { router } = require('./router');
+const { Card } = require('./models');
 
-module.exports = { router };
+module.exports = { Card, router };
