@@ -45,11 +45,10 @@ describe('Card endpoints', function() {
 
   before(function() {
     console.log('Starting database');
-    seedCardData();
     return runServer(TEST_DATABASE_URL);
   });
 
-  beforeEach(function() {
+  before(function() {
     return User.hashPassword(testuser.password).then(password =>
       User.create({
         name: testuser.name,
@@ -61,6 +60,10 @@ describe('Card endpoints', function() {
     );
   });
 
+  beforeEach(function() {
+    return seedCardData();
+  });
+
   afterEach(function() {
     return tearDownDb();
   });
@@ -69,8 +72,8 @@ describe('Card endpoints', function() {
     return closeServer();
   });
 
-  describe('/cards endpoint', function() {
-    it('should GET all cards', function() {
+  describe('GET endpoint', function() {
+    it('should get all cards', function() {
       return chai
         .request(app)
         .get('/api/cards')
@@ -83,7 +86,25 @@ describe('Card endpoints', function() {
         });
     });
 
-    it('should POST a card', function() {
+    it('should GET one card', function() {
+      return Card.findOne().then(card => {
+        console.log(card);
+        return chai
+          .request(app)
+          .get(`/api/cards/${card._id}`)
+          .set('Authorization', `Bearer ${authToken}`)
+          .then(res => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.include.keys('image', 'message', 'recipients', '_id');
+            expect(res.body._id).to.equal(card._id.toString());
+          });
+      });
+    });
+  });
+
+  describe('POST endpoint', function() {
+    it('should save a new card to database', function() {
       return chai
         .request(app)
         .post('/api/cards')
@@ -91,21 +112,54 @@ describe('Card endpoints', function() {
         .send(testCard)
         .then(res => {
           expect(res).to.have.status(201);
-          // expect(res.body).to.be.an('object');
-          // expect(res.body).to.include.keys('image', 'message', 'recipients');
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.include.keys('image', 'message', 'recipients');
         });
     });
+  });
 
-    // it('should GET all cards', function() {
-    //   return chai
-    //     .request(app)
-    //     .get('/api/cards')
-    //     .set('Authorization', `Bearer ${authToken}`)
-    //     .then(res => {
-    //       expect(res).to.have.status(200);
-    //       expect(res.body).to.be.an('array');
-    //       expect(res.body).to.include.keys('image', 'message', 'recipients');
-    //     });
-    // });
+  describe('PUT endpoint', function() {
+    const fieldsToUpdate = {
+      message: 'hello world',
+      recipients: ['hello@world.com']
+    };
+
+    it('should update a card', function() {
+      Card.findOne().then(card => {
+        fieldsToUpdate.id = card._id;
+        return chai
+          .request(app)
+          .put(`/api/cards/${fieldsToUpdate.id}`)
+          .set('Authorization', `Bearer ${authToken}`)
+          .send(fieldsToUpdate)
+          .then(res => {
+            expect(res).to.have.status(204);
+            return Card.findById(fieldsToUpdate.id).then(card => {
+              expect(card.message).to.equal(fieldsToUpdate.message);
+              expect(card.recipients).to.equal(fieldsToUpdate.recipients);
+            });
+          });
+      });
+    });
+  });
+
+  describe('DELETE endpoint', function() {
+    let card;
+    it('should delete a card', function() {
+      return Card.findOne()
+        .then(_card => {
+          card = _card;
+          return chai
+            .request(app)
+            .delete(`/api/cards/${card._id}`)
+            .set('Authorization', `Bearer ${authToken}`);
+        })
+        .then(res => {
+          expect(res).to.have.status(204);
+          return Card.findById(card._id).then(card => {
+            expect(card).to.be.null;
+          });
+        });
+    });
   });
 });
