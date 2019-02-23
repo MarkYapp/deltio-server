@@ -1,16 +1,15 @@
 'use strict';
 const express = require('express');
+const router = express.Router();
+
 const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 
 const { User } = require('./models');
 
-const router = express.Router();
-
-const jsonParser = bodyParser.json();
-
-// Post to register a new user
+// Register a new user
 router.post('/', jsonParser, (req, res) => {
-  const requiredFields = ['username', 'password', 'name'];
+  const requiredFields = ['name', 'username', 'password'];
   const missingField = requiredFields.find(field => !(field in req.body));
 
   if (missingField) {
@@ -45,19 +44,13 @@ router.post('/', jsonParser, (req, res) => {
     return res.status(422).json({
       code: 422,
       reason: 'ValidationError',
-      message: 'Cannot start or end with whitespace',
-      location: nonTrimmedField
+      message: 'Password cannot start or end with whitespace'
     });
   }
 
   const sizedFields = {
-    username: {
-      min: 1
-    },
     password: {
       min: 6,
-      // bcrypt truncates after 72 characters, so let's not give the illusion
-      // of security by storing extra (unused) info
       max: 72
     }
   };
@@ -73,27 +66,23 @@ router.post('/', jsonParser, (req, res) => {
       code: 422,
       reason: 'ValidationError',
       message: tooSmallField
-        ? `Must be at least ${sizedFields[tooSmallField].min} characters long`
-        : `Must be at most ${sizedFields[tooLargeField].max} characters long`,
-      location: tooSmallField || tooLargeField
+        ? `Password minimum is ${sizedFields[tooSmallField].min} characters`
+        : `Password maximum is ${sizedFields[tooLargeField].max} characters`
     });
   }
 
-  let { username, password, name } = req.body;
+  let { name, username, password } = req.body;
 
   return User.find({ username })
     .count()
     .then(count => {
       if (count > 0) {
-        // There is an existing user with the same username
         return Promise.reject({
           code: 422,
           reason: 'ValidationError',
-          message: 'Username already taken',
-          location: 'username'
+          message: 'Username already taken'
         });
       }
-      // If there is no existing user, hash the password
       return User.hashPassword(password);
     })
     .then(hash => {
@@ -107,8 +96,6 @@ router.post('/', jsonParser, (req, res) => {
       return res.status(201).json(user);
     })
     .catch(err => {
-      // Forward validation errors on to the client, otherwise give a 500
-      // error because something unexpected has happened
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }

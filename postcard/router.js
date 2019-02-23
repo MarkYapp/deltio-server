@@ -17,25 +17,27 @@ decodeJwt = authToken => {
   return decodedToken.user.username;
 };
 
-//Fetch all cards
-router.get('/', (req, res) => {
-  let username = decodeJwt(req.headers.authorization);
-  Card.find({ username: username })
-    .then(cards => {
-      res.json(cards);
-    })
-    .catch(err => res.status(500).json({ message: 'Internal server error' }));
-});
-
-//Fetch one card
+//Fetch one card - does not require auth
 router.get('/:id', (req, res) => {
   Card.findById(req.params.id)
     .then(card => res.json(card))
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
+//Fetch all cards
+router.get('/', jwtAuth, (req, res) => {
+  let username = decodeJwt(req.headers.authorization);
+  Card.find({ username: username })
+    .then(cards => {
+      console.log(`cards fetch res: ${cards}`);
+      setTimeout(() => res.json(cards), 3000);
+    })
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
+});
+
 //Create a card
-router.post('/', jsonParser, (req, res) => {
+router.post('/', jsonParser, jwtAuth, (req, res) => {
+  console.log(req.body);
   const { full, thumb, alt, credit, portfolio } = req.body.image;
   const { username, recipients, message } = req.body;
   Card.create({
@@ -51,7 +53,7 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 //Update a card
-router.put('/:id', jsonParser, (req, res) => {
+router.put('/:id', jsonParser, jwtAuth, (req, res) => {
   const toUpdate = {};
   const updateableFields = ['image', 'recipients', 'message'];
 
@@ -66,7 +68,7 @@ router.put('/:id', jsonParser, (req, res) => {
 });
 
 //Delete a card
-router.delete('/:id', (req, res) => {
+router.delete('/:id', jwtAuth, (req, res) => {
   Card.findByIdAndRemove(req.params.id)
     .then(() => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
