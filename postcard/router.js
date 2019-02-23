@@ -29,15 +29,13 @@ router.get('/', jwtAuth, (req, res) => {
   let username = decodeJwt(req.headers.authorization);
   Card.find({ username: username })
     .then(cards => {
-      console.log(`cards fetch res: ${cards}`);
-      setTimeout(() => res.json(cards), 3000);
+      res.json(cards);
     })
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 //Create a card
 router.post('/', jsonParser, jwtAuth, (req, res) => {
-  console.log(req.body);
   const { full, thumb, alt, credit, portfolio } = req.body.image;
   const { username, recipients, message } = req.body;
   Card.create({
