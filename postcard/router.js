@@ -6,8 +6,6 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 const jwtDecode = require('jwt-decode');
 
-// var jwt = require('jwt-simple');
-// const { JWT_SECRET } = require('./config');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 const { Card } = require('./models');

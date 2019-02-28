@@ -35,7 +35,7 @@ function seedCardData() {
 }
 
 function tearDownDb() {
-  console.warn('Deleting database');
+  console.info('Deleting database');
   return mongoose.connection.dropDatabase();
 }
 
@@ -44,7 +44,7 @@ describe('Card endpoints', function() {
   let testuser = { name: 'testuser', username: 'testuser', password: 'password' };
 
   before(function() {
-    console.log('Starting database');
+    console.info('Starting database');
     return runServer(TEST_DATABASE_URL);
   });
 
@@ -88,7 +88,6 @@ describe('Card endpoints', function() {
 
     it('should GET one card', function() {
       return Card.findOne().then(card => {
-        console.log(card);
         return chai
           .request(app)
           .get(`/api/cards/${card._id}`)
