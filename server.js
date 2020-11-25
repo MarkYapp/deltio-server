@@ -40,7 +40,7 @@ app.use('*', (req, res) => {
 
 let server;
 
-function runServer(databaseUrl, port = PORT) {
+function runServer(databaseUrl=DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, err => {
       if (err) {
