@@ -3,3 +3,4 @@ node_modules
 deltio-user-data.json
 deltio-card-data.json
 .env
+new-relic.js
